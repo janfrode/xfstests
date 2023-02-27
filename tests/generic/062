@@ -44,7 +44,7 @@ _create_test_bed()
 	mknod $SCRATCH_MNT/dev/c c 1 3
 	mknod $SCRATCH_MNT/dev/p p
 	# sanity check
-	find $SCRATCH_MNT | LC_COLLATE=POSIX sort | _filter_scratch | grep -v "lost+found"
+	find $SCRATCH_MNT | LC_COLLATE=POSIX sort | _filter_scratch | grep -v "lost+found" | grep -v ".snapshots"
 }
 
 # real QA test starts here
@@ -142,7 +142,7 @@ _extend_test_bed()
 	# whack a symlink in the middle, just to be difficult
 	ln -s $SCRATCH_MNT/here/up $SCRATCH_MNT/descend/and
 	# dump out our new starting point
-	find $SCRATCH_MNT | LC_COLLATE=POSIX sort | _filter_scratch | grep -v "lost+found"
+	find $SCRATCH_MNT | LC_COLLATE=POSIX sort | _filter_scratch | grep -v "lost+found" | grep -v ".snapshots"
 }
 
 _extend_test_bed
@@ -176,7 +176,7 @@ echo "*** backup everything"
 _backup $tmp.backup1
 
 echo "*** clear out the scratch device"
-rm -rf $(find $SCRATCH_MNT/* | grep -v "lost+found")
+rm -rf $(find $SCRATCH_MNT/* | grep -v "lost+found" | grep -v ".snapshots")
 echo "AFTER REMOVE" >>$seqres.full
 getfattr -L -R -m '.' $SCRATCH_MNT >>$seqres.full
 
